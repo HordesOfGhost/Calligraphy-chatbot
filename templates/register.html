@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register - AI Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 15px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 12px 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #0084ff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #005bb5;
+    }
+    .link {
+      margin-top: 15px;
+      display: block;
+      color: #0084ff;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>Create an Account</h2>
+  <input id="reg-email" type="email" placeholder="Email" required />
+  <input id="reg-password" type="password" placeholder="Password" required />
+  <button id="register-btn">Register</button>
+
+  <a href="/login.html" class="link">Already have an account? Login</a>
+
+  <script type="module">
+    import { firebaseConfig } from '/static/firebase-config.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById("register-btn").addEventListener("click", async () => {
+      const email = document.getElementById("reg-email").value.trim();
+      const password = document.getElementById("reg-password").value.trim();
+
+      if (!email || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Registered successfully! You can now log in.");
+        window.location.href = "/login";
+      } catch (err) {
+        alert("Registration error: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>

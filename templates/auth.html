@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register / Login</title>
+</head>
+<body>
+  <h2>Register</h2>
+  <input id="reg-email" type="email" placeholder="Email" />
+  <input id="reg-password" type="password" placeholder="Password" />
+  <button id="register-btn">Register</button>
+
+  <h2>Login</h2>
+  <input id="login-email" type="email" placeholder="Email" />
+  <input id="login-password" type="password" placeholder="Password" />
+  <button id="login-btn">Login</button>
+
+  <script type="module">
+    import { firebaseConfig } from '/static/firebase-config.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Register button event
+    document.getElementById("register-btn").addEventListener("click", async () => {
+      const email = document.getElementById("reg-email").value;
+      const password = document.getElementById("reg-password").value;
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Registered successfully! You can now login.");
+      } catch (err) {
+        alert("Registration error: " + err.message);
+      }
+    });
+
+    // Login button event
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Logged in!");
+        window.location.href = "/chat";
+      } catch (err) {
+        alert("Login error: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
