@@ -17,11 +17,6 @@ app.mount(
     name="static",
 )
 
-app.include_router(root.router)
-app.include_router(events.router)
-app.include_router(user.router)
-app.include_router(chat.router)
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,4 +25,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.include_router(root.router)
+app.include_router(events.router)
+app.include_router(user.router)
+app.include_router(chat.router)
+
 
