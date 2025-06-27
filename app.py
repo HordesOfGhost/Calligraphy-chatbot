@@ -5,10 +5,10 @@ from pathlib import Path
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from auth import verify_token
-from chat import chat_with_gpt
-from schemas import Message
-from services.scrape.scrape_utils import get_or_scrape_data
+from services.authentication.auth import verify_token
+from services.chatbot import chat_with_chatbot
+from schemas.schemas import Message
+from services.scrape.scraper import get_or_scrape_data
 
 # Load or scrape content
 scraped_docs = get_or_scrape_data()
@@ -52,4 +52,4 @@ async def chat_page(request: Request):
 @app.post("/chat")
 async def chat_endpoint(message: Message, request: Request):
     verify_token(request)
-    return chat_with_gpt(message, request)
+    return chat_with_chatbot(message, request)

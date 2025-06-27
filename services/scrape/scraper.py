@@ -5,13 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse, urldefrag
 import re
-
-SCRAPE_PATH = "scraped_data/calligraphy_content.json"
-MAX_AGE_SECONDS = 3 * 30 * 24 * 60 * 60  # ≈ 3 months
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; MyBot/1.0; +http://yourdomain.com/bot)"
-}
+from .conifg import SCRAPE_PATH, MAX_AGE_SECONDS, HEADERS
 
 
 def clean_text(text):

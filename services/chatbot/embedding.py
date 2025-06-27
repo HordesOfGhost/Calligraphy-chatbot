@@ -1,6 +1,7 @@
 from typing import List
 from huggingface_hub import InferenceClient
 import numpy as np
+
 class HFMiniLMEmbeddings:
     def __init__(self, hf_token: str):
         self.client = InferenceClient(api_key=hf_token)

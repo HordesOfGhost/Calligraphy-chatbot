@@ -1,26 +1,14 @@
 import os
-import json
 from fastapi import Request, HTTPException
-from auth import verify_token
-from schemas import Message
-from dotenv import load_dotenv
-import google.generativeai as genai
+from services.authentication.auth import verify_token
+from schemas.schemas import Message
 from langchain_community.vectorstores import FAISS
-from embedding import HFMiniLMEmbeddings
-load_dotenv()
+from .config import gemini_model, embeddings_model, calligraphy_data
+from .prompt import system_prompt 
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-hf_token = os.getenv("HF_TOKEN")
+texts = [doc["content"] for doc in calligraphy_data]
 
-model = genai.GenerativeModel("gemini-2.0-flash")
-
-# Load scraped data and build vectorstore on app startup
-with open("scraped_data/calligraphy_content.json", "r", encoding="utf-8") as f:
-    docs = json.load(f)
-texts = [doc["content"] for doc in docs]
-
-embeddings = HFMiniLMEmbeddings(hf_token)
-vectorstore = FAISS.from_texts(texts, embeddings)
+vectorstore = FAISS.from_texts(texts, embeddings_model)
 
 # Simple in-memory chat history store (dictionary keyed by user/session ID)
 chat_histories = {}
@@ -39,17 +27,16 @@ def build_prompt(query, user_id):
     history = chat_histories.get(user_id, [])
 
     # Build the prompt: system/context + history + user query
-    prompt = "You are a helpful assistant. Use the following context to answer:\n"
-    prompt += context_text + "\n\n"
+    system_prompt += context_text + "\n\n"
 
     if history:
-        prompt += "Chat history:\n" + "\n".join(history) + "\n"
+        system_prompt += "Chat history:\n" + "\n".join(history) + "\n"
 
-    prompt += f"User: {query}\nAssistant:"
+    system_prompt += f"User: {query}\nAssistant:"
 
-    return prompt
+    return system_prompt
 
-def chat_with_gpt(message: Message, request: Request):
+def chat_with_chatbot(message: Message, request: Request):
     verify_token(request)  # Validate Firebase token
 
     # Use some user ID from token or request to track chat (simplified here)
@@ -58,7 +45,7 @@ def chat_with_gpt(message: Message, request: Request):
     try:
         prompt = build_prompt(message.prompt, user_id)
 
-        response = model.generate_content(prompt)
+        response = gemini_model.generate_content(prompt)
         reply = response.text.strip()
 
         # Save interaction in chat history
