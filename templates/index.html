@@ -151,8 +151,9 @@
 
       try {
         const token = await user.getIdToken();
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-        const res = await fetch("http://localhost:8000/chat", {
+        const res = await fetch(`${API_BASE_URL}/chat`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${token}`,
