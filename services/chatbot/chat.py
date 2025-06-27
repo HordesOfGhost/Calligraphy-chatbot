@@ -15,7 +15,7 @@ chat_histories = {}
 
 def retrieve_relevant_docs(query, k=3):
     retriever = vectorstore.as_retriever(search_kwargs={"k": k})
-    results = retriever.get_relevant_documents(query)
+    results = retriever.invoke(query)
     return results
 
 def build_prompt(query, user_id):
@@ -25,16 +25,16 @@ def build_prompt(query, user_id):
 
     # Get chat history for user (list of strings)
     history = chat_histories.get(user_id, [])
-
+    # prompt = "You are a helpful assistant. Refrain from saying things out of context. Use the following context to answer:\n"
     # Build the prompt: system/context + history + user query
-    system_prompt += context_text + "\n\n"
+    prompt = system_prompt + context_text + "\n\n"
 
     if history:
-        system_prompt += "Chat history:\n" + "\n".join(history) + "\n"
+        prompt += "Chat history:\n" + "\n".join(history) + "\n"
 
-    system_prompt += f"User: {query}\nAssistant:"
+    prompt += f"User: {query}\nAssistant:"
 
-    return system_prompt
+    return prompt
 
 def chat_with_chatbot(message: Message, request: Request):
     verify_token(request)  # Validate Firebase token

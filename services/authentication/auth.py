@@ -1,5 +1,10 @@
 from fastapi import Request, HTTPException
-from firebase_admin import auth
+from firebase_admin import auth, credentials
+import firebase_admin
+from .config import firebase_config
+
+cred = credentials.Certificate(firebase_config)
+firebase_admin.initialize_app(cred)
 
 def verify_token(request: Request):
     auth_header = request.headers.get("Authorization")

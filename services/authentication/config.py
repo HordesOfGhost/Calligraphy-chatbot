@@ -1,6 +1,4 @@
 import os
-import firebase_admin
-from firebase_admin import credentials
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,8 +17,8 @@ firebase_config = {
     "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN")
 }
 
-def init_firebase_auth():
-    cred = credentials.Certificate("serviceAccountKey.json")
+# def init_firebase_auth():
+#     cred = credentials.Certificate("serviceAccountKey.json")
 
-    # cred = credentials.Certificate(firebase_config)
-    firebase_admin.initialize_app(cred)
+#     cred = credentials.Certificate(firebase_config)
+#     firebase_admin.initialize_app(cred)
