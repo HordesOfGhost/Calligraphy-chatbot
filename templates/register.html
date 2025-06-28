@@ -2,59 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Register - Calligraphy AI Chatbot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Register - AI Chatbot</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 15px;
-      text-align: center;
-    }
-    h2 {
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 12px 10px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1rem;
-      margin-top: 15px;
-      border: none;
-      border-radius: 5px;
-      background-color: #0084ff;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-    button:hover {
-      background-color: #005bb5;
-    }
-    .link {
-      margin-top: 15px;
-      display: block;
-      color: #0084ff;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', path='styles/register.css') }}">
+
 </head>
 <body>
-  <h2>Create an Account</h2>
-  <input id="reg-email" type="email" placeholder="Email" required />
-  <input id="reg-password" type="password" placeholder="Password" required />
-  <button id="register-btn">Register</button>
+  <div id="navbar">
+    <img src="/static/img/calligraphy_header.png" alt="Chatbot Logo" class="logo" />
+  </div>
 
-  <a href="/login.html" class="link">Already have an account? Login</a>
+  <div class="register-container">
+    <h2>Create an Account</h2>
+    <input id="reg-email" type="email" placeholder="Email" required />
+    <input id="reg-password" type="password" placeholder="Password" required />
+    <button id="register-btn">Register</button>
+    <a href="/login" class="link">Already have an account? Login</a>
+  </div>
 
   <script type="module">
     import { firebaseConfig } from '/static/firebase-config.js';

@@ -2,59 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Login - Calligraphy AI Chatbot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login - AI Chatbot</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 15px;
-      text-align: center;
-    }
-    h2 {
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 12px 10px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1rem;
-      margin-top: 15px;
-      border: none;
-      border-radius: 5px;
-      background-color: #0084ff;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-    button:hover {
-      background-color: #005bb5;
-    }
-    .link {
-      margin-top: 15px;
-      display: block;
-      color: #0084ff;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', path='styles/login.css') }}">
 </head>
 <body>
-  <h2>Login to Your Account</h2>
-  <input id="login-email" type="email" placeholder="Email" required />
-  <input id="login-password" type="password" placeholder="Password" required />
-  <button id="login-btn">Login</button>
+  <div id="navbar">
+    <img src="/static/img/calligraphy_header.png" alt="Chatbot Logo" class="logo" />
+  </div>
 
-  <a href="/register" class="link">Don't have an account? Register</a>
+  <div class="login-container">
+    <h2>Login to Your Account</h2>
+    <input id="login-email" type="email" placeholder="Email" required />
+    <input id="login-password" type="password" placeholder="Password" required />
+    <button id="login-btn">Login</button>
+    <a href="/register" class="link">Don't have an account? Register</a>
+  </div>
 
   <script type="module">
     import { firebaseConfig } from '/static/firebase-config.js';
@@ -79,7 +42,7 @@
       try {
         await signInWithEmailAndPassword(auth, email, password);
         alert("Logged in successfully!");
-        window.location.href = "/chat";  // your chat page path
+        window.location.href = "/chat";
       } catch (err) {
         alert("Login error: " + err.message);
       }
