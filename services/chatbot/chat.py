@@ -1,4 +1,3 @@
-import os
 from fastapi import Request, HTTPException
 from services.authentication.auth import verify_token
 from schemas.schemas import Message
@@ -14,19 +13,40 @@ vectorstore = FAISS.from_texts(texts, embeddings_model)
 chat_histories = {}
 
 def retrieve_relevant_docs(query, k=3):
+    """
+    Retrieve top-k most relevant documents from the vector store for a given query.
+
+    Args:
+        query (str): The user query to search for.
+        k (int): Number of top relevant documents to retrieve.
+
+    Returns:
+        List of documents ranked by relevance.
+    """
+
     retriever = vectorstore.as_retriever(search_kwargs={"k": k})
     results = retriever.invoke(query)
     return results
 
 def build_prompt(query, user_id):
+    """
+    Build the full prompt for the language model using system instructions, relevant context, and chat history.
+
+    Args:
+        query (str): The current user query.
+        user_id (str): Unique identifier for the user (used to retrieve chat history).
+
+    Returns:
+        str: The constructed prompt string for the language model.
+    """
+
     # Retrieve relevant docs
     relevant_docs = retrieve_relevant_docs(query)
     context_text = "\n---\n".join([doc.page_content for doc in relevant_docs])
 
     # Get chat history for user (list of strings)
     history = chat_histories.get(user_id, [])
-    # prompt = "You are a helpful assistant. Refrain from saying things out of context. Use the following context to answer:\n"
-    # Build the prompt: system/context + history + user query
+    
     prompt = system_prompt + context_text + "\n\n"
 
     if history:
@@ -37,6 +57,26 @@ def build_prompt(query, user_id):
     return prompt
 
 def chat_with_chatbot(message: Message, request: Request):
+    """
+    Handle a chat interaction with the chatbot.
+
+    This function:
+    - Verifies Firebase authentication
+    - Builds a prompt based on chat history and relevant documents
+    - Sends the prompt to the Gemini model
+    - Stores the exchange in chat history
+
+    Args:
+        message (Message): The input message from the user.
+        request (Request): The FastAPI request object containing headers and auth info.
+
+    Returns:
+        dict: A dictionary containing the assistant's reply.
+
+    Raises:
+        HTTPException: If token verification fails or an internal error occurs.
+    """
+    
     verify_token(request)  # Validate Firebase token
 
     # Use some user ID from token or request to track chat (simplified here)

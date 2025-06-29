@@ -3,13 +3,30 @@ from huggingface_hub import InferenceClient
 import numpy as np
 
 class HFMiniLMEmbeddings:
+    """
+    A wrapper class for embedding text using the MiniLM model hosted on Hugging Face Inference API.
+    It supports both single query embedding and batch document embedding.
+    """
     def __init__(self, hf_token: str):
+        """
+        Initialize the Hugging Face Inference Client.
+
+        Args:
+            hf_token (str): Hugging Face API token for authentication.
+        """
         self.client = InferenceClient(api_key=hf_token)
         self.model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
     def mean_pooling(self, token_embeddings):
-        # If token_embeddings is a flat vector (list of floats or numpy array 1D), just return it as is
-        # This covers the case when feature_extraction returns an embedding vector for the whole sentence
+        """
+        Perform mean pooling on token embeddings to obtain a single sentence-level embedding.
+
+        Args:
+            token_embeddings (List[List[float]] or List[float]): Token-level embeddings or a single vector.
+
+        Returns:
+            List[float]: Sentence-level embedding vector.
+        """
         if isinstance(token_embeddings[0], (float, np.floating)):
             return token_embeddings
 
@@ -25,6 +42,15 @@ class HFMiniLMEmbeddings:
 
 
     def embed_documents(self, texts):
+        """
+        Embed a list of documents using MiniLM and mean pooling.
+
+        Args:
+            texts (List[str]): List of input texts to embed.
+
+        Returns:
+            List[List[float]]: List of embedding vectors for each text.
+        """
         all_embeddings = []
         for text in texts:
             token_embs = self.client.feature_extraction(text, model=self.model_name)
@@ -37,13 +63,33 @@ class HFMiniLMEmbeddings:
         return all_embeddings
 
     def embed_query(self, text):
+        """
+        Embed a single query (string) using MiniLM.
+
+        Args:
+            text (str): The input query text.
+
+        Returns:
+            List[float]: The embedding vector.
+        """
         token_embs = self.client.feature_extraction(text, model=self.model_name)
         if isinstance(token_embs[0], float):
             return token_embs
         return self.mean_pooling(token_embs)
 
     def __call__(self, texts):
-        # This makes your object callable, so FAISS.from_texts works
+        """
+        Make the class instance callable. Automatically routes to embedding method based on input type.
+
+        Args:
+            texts (str or List[str]): A single string or a list of strings to embed.
+
+        Returns:
+            List[float] or List[List[float]]: Embedding vector(s).
+
+        Raises:
+            ValueError: If input is not a string or list of strings.
+        """
         if isinstance(texts, str):
             return self.embed_query(texts)
         elif isinstance(texts, list):

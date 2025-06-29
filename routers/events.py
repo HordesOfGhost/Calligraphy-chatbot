@@ -8,7 +8,6 @@ async def on_startup():
     """
     Run initialization tasks on application startup.
     """
-    # Load or scrape content
-    scraped_docs = get_or_scrape_data()
+    get_or_scrape_data()
 
     

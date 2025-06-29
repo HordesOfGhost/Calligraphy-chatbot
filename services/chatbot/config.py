@@ -16,7 +16,11 @@ hf_token = os.getenv("HF_TOKEN")
 gemini_model = genai.GenerativeModel("gemini-2.0-flash")
 embeddings_model = HFMiniLMEmbeddings(hf_token)
 
-# Load scraped data and build vectorstore on app startup
-with open("knowledge_base/calligraphy_content.json", "r", encoding="utf-8") as f:
-    calligraphy_data = json.load(f)
-
+# Load data
+calligraphy_data = []
+json_path = "knowledge_base/calligraphy_content.json"
+if os.path.exists(json_path):
+    with open(json_path, "r", encoding="utf-8") as f:
+        calligraphy_data = json.load(f)
+else:
+    print(f"Warning: {json_path} does not exist. Starting with empty calligraphy_data.")

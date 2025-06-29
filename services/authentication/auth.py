@@ -7,6 +7,21 @@ cred = credentials.Certificate(firebase_config)
 firebase_admin.initialize_app(cred)
 
 def verify_token(request: Request):
+    """
+    Verifies the Firebase ID token from the Authorization header in the request.
+
+    Args:
+        request (Request): The incoming HTTP request containing the Authorization header.
+
+    Returns:
+        dict: A dictionary containing the user's UID and optionally their email.
+
+    Raises:
+        HTTPException: 
+            - 403 if the Authorization header is missing or malformed.
+            - 401 if the token is invalid or verification fails.
+    """
+
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=403, detail="Missing or invalid Authorization header")
