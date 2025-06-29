@@ -2,7 +2,8 @@ from .embedding import HFMiniLMEmbeddings
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
-import json
+from services.scrape.scraper import get_or_scrape_data
+
 load_dotenv()
 
 
@@ -17,10 +18,4 @@ gemini_model = genai.GenerativeModel("gemini-2.0-flash")
 embeddings_model = HFMiniLMEmbeddings(hf_token)
 
 # Load data
-calligraphy_data = []
-json_path = "knowledge_base/calligraphy_content.json"
-if os.path.exists(json_path):
-    with open(json_path, "r", encoding="utf-8") as f:
-        calligraphy_data = json.load(f)
-else:
-    print(f"Warning: {json_path} does not exist. Starting with empty calligraphy_data.")
+calligraphy_data = get_or_scrape_data()    
