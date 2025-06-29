@@ -1,7 +1,7 @@
 from fastapi import Request, HTTPException
-from services.authentication.auth import verify_token
 from schemas.schemas import Message
 from langchain_community.vectorstores import FAISS
+from services.authentication.auth import verify_token
 from .config import gemini_model, embeddings_model, calligraphy_data
 from .prompt import system_prompt 
 

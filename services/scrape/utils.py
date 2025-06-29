@@ -1,9 +1,8 @@
-from .conifg import SCRAPE_PATH, MAX_AGE_SECONDS
-from urllib.parse import urljoin, urldefrag
 import os
-
 import time
 import re
+from .conifg import SCRAPE_PATH, MAX_AGE_SECONDS
+from urllib.parse import urljoin, urldefrag
 
 def clean_text(text):
     """

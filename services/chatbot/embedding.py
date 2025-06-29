@@ -1,4 +1,3 @@
-from typing import List
 from huggingface_hub import InferenceClient
 import numpy as np
 

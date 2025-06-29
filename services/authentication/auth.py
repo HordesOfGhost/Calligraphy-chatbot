@@ -1,6 +1,6 @@
+import firebase_admin
 from fastapi import Request, HTTPException
 from firebase_admin import auth, credentials
-import firebase_admin
 from .config import firebase_config
 
 cred = credentials.Certificate(firebase_config)

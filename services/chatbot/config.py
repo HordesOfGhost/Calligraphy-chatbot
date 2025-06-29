@@ -1,8 +1,8 @@
-from .embedding import HFMiniLMEmbeddings
-from dotenv import load_dotenv
 import os
 import google.generativeai as genai
+from dotenv import load_dotenv
 from services.scrape.scraper import get_or_scrape_data
+from .embedding import HFMiniLMEmbeddings
 
 load_dotenv()
 
