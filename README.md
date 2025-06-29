@@ -127,6 +127,9 @@ Firebase ID token verification is used to secure the `/chat` endpoint.
 4. Send the ID token in the `Authorization` header when posting messages.
 
 ## Demo
-[[demo/demo.mp4](demo/demo.mp4)](https://github.com/HordesOfGhost/Calligraphy-chatbot/blob/main/demo/demo.mp4)
+
+https://github.com/user-attachments/assets/d2e69a63-ea81-482c-ac3d-29eeeb4f4be7
+
+
 ---
 
