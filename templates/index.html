@@ -44,6 +44,13 @@
     const sendBtn = document.getElementById("send-btn");
     const logoutBtn = document.getElementById("logout-btn");
 
+    promptInput.addEventListener("keydown", async (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault(); 
+        sendBtn.click();    
+      }
+    });
+
     function appendMessage(text, sender) {
       const messageRow = document.createElement("div");
       messageRow.classList.add("message-row", "message", `${sender}-message`);
