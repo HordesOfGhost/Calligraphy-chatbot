@@ -4,7 +4,6 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from routers import (
     root,
-    events,
     chat,
     user
 )
@@ -28,7 +27,6 @@ app.add_middleware(
 
 
 app.include_router(root.router)
-app.include_router(events.router)
 app.include_router(user.router)
 app.include_router(chat.router)
 
