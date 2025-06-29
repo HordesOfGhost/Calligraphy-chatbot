@@ -2,15 +2,13 @@ from fastapi import Request, HTTPException
 from schemas.schemas import Message
 from langchain_community.vectorstores import FAISS
 from services.authentication.auth import verify_token
+from utils.state import chat_histories
 from .config import gemini_model, embeddings_model, calligraphy_data
 from .prompt import system_prompt 
 
 texts = [doc["content"] for doc in calligraphy_data]
 
 vectorstore = FAISS.from_texts(texts, embeddings_model)
-
-# Simple in-memory chat history store (dictionary keyed by user/session ID)
-chat_histories = {}
 
 def retrieve_relevant_docs(query, k=3):
     """
@@ -77,11 +75,9 @@ def chat_with_chatbot(message: Message, request: Request):
         HTTPException: If token verification fails or an internal error occurs.
     """
     
-    verify_token(request)  # Validate Firebase token
-
-    # Use some user ID from token or request to track chat (simplified here)
-    user_id = request.headers.get("X-User-ID", "anonymous")
-
+    user_info = verify_token(request)
+    user_id = user_info["uid"]  
+    
     try:
         prompt = build_prompt(message.prompt, user_id)
 

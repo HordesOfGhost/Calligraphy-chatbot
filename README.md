@@ -49,41 +49,48 @@ Visit the chat at: [http://localhost:8000](http://localhost:8000)
 ---
 
 ## Docker Deployment
+To run your FastAPI app with Docker, follow these steps:
 
-### Dockerfile
+---
 
-```dockerfile
-FROM python:3.10-slim
+### 1. Build and start the container
 
-WORKDIR /app
-
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-### docker-compose.yml
-
-```yaml
-version: '3'
-
-services:
-  fastapi:
-    build: .
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
-```
-
-### Build and Run with Docker
+In the directory containing your `Dockerfile` and `docker-compose.yml`, run:
 
 ```bash
 docker-compose up --build
+```
+
+This command will:
+
+* Build the Docker image from your Dockerfile
+* Start a container for your FastAPI app
+* Map port 8000 on your local machine to port 8000 in the container
+
+---
+
+### 2. Access the app
+
+Once the container is running, you can open your browser and go to:
+
+```
+http://localhost:8000
+```
+
+To view the interactive API documentation provided by FastAPI, go to:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+### 3. Stop the container
+
+To stop and remove the running container, press `Ctrl+C` and then run:
+
+```bash
+docker-compose down
 ```
 
 ---
@@ -119,5 +126,7 @@ Firebase ID token verification is used to secure the `/chat` endpoint.
 3. Use it inside the authentication module for verification.
 4. Send the ID token in the `Authorization` header when posting messages.
 
+## Demo
+[demo/demo.mp4](demo/demo.mp4)
 ---
 

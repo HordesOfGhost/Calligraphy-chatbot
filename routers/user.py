@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
 from fastapi import Request
+from utils.state import chat_histories
 from .config import templates
 
 router = APIRouter()
@@ -16,6 +17,10 @@ async def login_page(request: Request):
     Returns:
         HTMLResponse: The rendered login.html template response.
     """
+    # for removing chat_histories
+    
+    chat_histories.clear()
+
     return templates.TemplateResponse("login.html", {"request": request})
 
 @router.get("/register", response_class=HTMLResponse, tags=['auth'])
